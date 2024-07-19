@@ -1,0 +1,121 @@
+package HealX;
+
+import static com.mongodb.client.model.Filters.eq;
+
+import org.apache.commons.lang3.ObjectUtils;
+import org.bson.Document;
+
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
+
+import java.util.Map;
+
+public class    RemoteDB {
+    MongoCollection<Document> collection;
+    // Constructor Function
+    public RemoteDB() {
+        String uri = "mongodb+srv://Rahul:dl5ce1315@cluster0.wr7uofz.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+        MongoClient mongoClient = MongoClients.create(uri) ;
+        MongoDatabase database = mongoClient.getDatabase("loblaw");
+        collection = database.getCollection("locator");
+
+    }
+    // Function to update all the attributes in first run
+    public void setAttributesAndCoordinates(String locatorName , int x, int y, Map<String, String> attributes){
+        Document filter = new Document("key", locatorName);
+
+        // Define the updates you want to apply
+        Document update = new Document("$set", new Document("x", x)
+                .append("y", y)
+                .append("attributes",attributes)
+        );
+
+        // Perform the update
+        collection.updateOne(filter, update);
+
+        System.out.println("Position and Attributes of "+ locatorName +" updated successfully in Remote DB");
+    }
+    // Function to get the locator from a given locatorName
+    public String getLocator(String locatorName){
+        // Replace the placeholder with your MongoDB deployment's connection string
+           Document doc= collection.find(eq("key", locatorName)).first();
+
+
+        if (doc != null) {
+            System.out.println(doc.toJson());
+            System.out.println(doc.getString("locator"));
+        } else {
+            System.out.println("No matching documents found.");
+            return null;
+        }
+        return doc.getString("locator");
+    }
+
+    public String getLocatorType(String locatorName){
+        // Replace the placeholder with your MongoDB deployment's connection string
+        Document doc= collection.find(eq("key", locatorName)).first();
+
+
+        if (doc == null)  {
+            System.out.println("No matching documents found.");
+            return null;
+        }
+        return doc.getString("locatorType");
+    }
+    public String getAlternateLocator(String locatorName){
+        // Replace the placeholder with your MongoDB deployment's connection string
+        Document doc= collection.find(eq("key", locatorName)).first();
+
+
+        if (doc == null)  {
+            System.out.println("No matching documents found.");
+            return null;
+        }
+        return doc.getString("alternateLocator");
+    }
+    public String getAlternateLocatorType(String locatorName){
+        // Replace the placeholder with your MongoDB deployment's connection string
+        Document doc= collection.find(eq("key", locatorName)).first();
+
+
+        if (doc == null)  {
+            System.out.println("No matching documents found.");
+            return null;
+        }
+        return doc.getString("alternateLocatorType");
+    }
+    public String getAttributeValue(String locatorName, String attributeName){
+        Document doc= collection.find(eq("key", locatorName)).first();
+
+        if (doc == null)  {
+            System.out.println("No matching documents found.");
+            return null;
+        }
+        Document attributes = doc.get("attributes", Document.class);
+
+        if (attributes != null && attributes.containsKey(attributeName)) {
+            // Retrieve the value of the "autocomplete" key
+            String attributeValue = attributes.get(attributeName);
+        }
+//        return doc.getString("alternateLocatorType");
+    }
+    public void addData(String locatorName, String locatorType,String locatorValue){
+        Document document = new Document("key", locatorName)
+                .append("locator", locatorValue)
+                .append("locatorType",locatorType)
+                .append("alternateLocator","")
+                .append("alternateLocatorType","")
+                .append("x", null)
+                .append("y", null)
+                .append("attributes", new Document());;
+
+        // Insert the Document into the collection
+        collection.insertOne(document);
+
+        System.out.println("New Locator: "+locatorName+"inserted successfully");
+    }
+
+
+}
