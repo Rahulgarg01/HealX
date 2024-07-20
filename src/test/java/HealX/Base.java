@@ -8,27 +8,30 @@ import org.openqa.selenium.chrome.ChromeDriver;
 
 public class Base {
     public static WebDriver driver;
-    Base(){
+
+    Base() {
         driver = new ChromeDriver();
     }
-    public void setUp(){
+
+    public void setUp() {
         driver.get("https://www.amazon.in/");
     }
-    public WebDriver getDriver(){
+
+    public WebDriver getDriver() {
         return driver;
     }
+
     public void tearDown() {
         if (driver != null) {
             driver.quit();
         }
     }
-    public WebElement findElement(String locatorType,String locatorValue){
+
+    public WebElement findElement(String locatorType, String locatorValue) {
         WebElement element = null;
         try {
             if (locatorType.equals("id")) {
-//                System.out.println("Greeeeeeeeeeeeeeeee");
                 element = driver.findElement(By.id(locatorValue));
-//                System.out.println("Ram Ram ji");
             } else if (locatorType == "css") {
                 element = driver.findElement(By.cssSelector(locatorValue));
             } else if (locatorType == "xpath") {
@@ -36,11 +39,10 @@ public class Base {
             } else {
                 element = driver.findElement(By.xpath("//*[contains(@" + locatorType + ", '" + locatorValue + "')]"));
             }
-        }catch (NoSuchElementException e){
+        } catch (NoSuchElementException e) {
             return null;
         }
 
         return element;
     }
-
 }

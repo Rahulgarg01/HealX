@@ -9,6 +9,7 @@ import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import org.testng.internal.collections.Pair;
 
 import java.util.Map;
 
@@ -86,20 +87,20 @@ public class    RemoteDB {
         }
         return doc.getString("alternateLocatorType");
     }
-    public String getAttributeValue(String locatorName, String attributeName){
+    public String getLocatorAttributeValue(String locatorName, String attributeName){
         Document doc= collection.find(eq("key", locatorName)).first();
-
         if (doc == null)  {
             System.out.println("No matching documents found.");
             return null;
         }
+        String attributeValue = null;
         Document attributes = doc.get("attributes", Document.class);
 
         if (attributes != null && attributes.containsKey(attributeName)) {
             // Retrieve the value of the "autocomplete" key
-            String attributeValue = attributes.get(attributeName);
+            attributeValue =  attributes.getString(attributeName);
         }
-//        return doc.getString("alternateLocatorType");
+        return attributeValue;
     }
     public void addData(String locatorName, String locatorType,String locatorValue){
         Document document = new Document("key", locatorName)
@@ -116,6 +117,16 @@ public class    RemoteDB {
 
         System.out.println("New Locator: "+locatorName+"inserted successfully");
     }
-
+    public Pair<Integer,Integer> getElementPosition(String locatorName){
+        Document doc= collection.find(eq("key", locatorName)).first();
+        if (doc == null)  {
+            System.out.println("No matching documents found.");
+            return null;
+        }
+        int x = doc.getInteger('x');
+        int y = doc.getInteger('y');
+        Pair<Integer, Integer> position = Pair.of(x,y);
+        return position;
+    }
 
 }

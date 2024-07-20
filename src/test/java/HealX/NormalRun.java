@@ -1,6 +1,7 @@
 package HealX;
 
 import org.apache.commons.lang3.tuple.Pair;
+import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -37,8 +38,15 @@ public class NormalRun {
                 }
             }
             HealX healingObj = new HealX(driver);
-
-
+            String healedLoc = healingObj.getHealedLocatorUsingAttributes(locatorName);
+            if(healedLoc!=null){
+                element = driver.findElement(By.xpath(healedLoc));
+                return element;
+            }
+            element = healingObj.getHealedWebElementUsingPosition(locatorName);
+            if(element== null){
+                System.out.println("Unable to find A healed Locator. Ensure that after integrating HealX in your project you have made a firstRun with Correct locators and tests were passing");
+            }
         }
         return element;
     }
