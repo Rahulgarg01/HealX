@@ -23,14 +23,14 @@ public class NormalRun {
         WebElement element = base.findElement(locatorType,locatorValue);
         if (element == null) {
             System.out.println("Element not found using previous locator, Trying to heal");
-//            driver.navigate().refresh();
-//            wait.until((ExpectedCondition<Boolean>) wd ->
-//                    ((JavascriptExecutor) wd).executeScript("return document.readyState").equals("complete"));
-//            element = base.findElement(locatorType, locatorValue);
-//            if (element != null) {
-//                System.out.println("Element Found After Refresh");
-//                return element;
-//            }
+            driver.navigate().refresh();
+            wait.until((ExpectedCondition<Boolean>) wd ->
+                    ((JavascriptExecutor) wd).executeScript("return document.readyState").equals("complete"));
+            element = base.findElement(locatorType, locatorValue);
+            if (element != null) {
+                System.out.println("Element Found After Refresh");
+                return element;
+            }
             String alternateLocator = db.getAlternateLocator(locatorName);
             String alternateLocatorType = db.getAlternateLocatorType(locatorName);
             if (!alternateLocator.equals("")) {
