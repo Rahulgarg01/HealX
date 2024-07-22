@@ -19,7 +19,7 @@ public class HealX {
     public static WebDriverWait wait;
     RemoteDB db = new RemoteDB();
     private static final List<String> ATTRIBUTE_PRIORITY = Arrays.asList(
-            "id", "name", "class","type","placeholder","value", "data-test.java", "aria-label", "title", "for"
+            "id", "name", "class","type","placeholder","value", "data-test.java", "aria-label", "href", "title", "for"
     );
     HealX(WebDriver driver){
         this.driver = driver;
@@ -34,8 +34,8 @@ public class HealX {
                 continue;
             }
             try {
-                log("Trying attribute: " + attr);
-                newLocator ="//*[contains(@" + attr + ", '" + value + "')]";
+                System.out.println("Trying attribute: " + attr);
+                newLocator ="//*[@" + attr + "='" + value + "']";
                 List<WebElement> newNode = wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(
                         By.xpath(newLocator)
                 ));
@@ -43,12 +43,14 @@ public class HealX {
                     log("Element Found !!!");
                     return newLocator;
                 }
+                newLocator = null;
 //                if (newNode != null) {
 //                    log("Found new node using attribute: " + attr);
 //                    break;
 //                }
             } catch (Exception e) {
-                log("Failed to find node using attribute: " + attr);
+                System.out.println("Failed to find node using attribute: " + attr);
+                newLocator = null;
             }
         }
         return newLocator;
@@ -63,6 +65,8 @@ public class HealX {
             element = (WebElement) js.executeScript(
                 "return document.elementFromPoint(arguments[0], arguments[1]);", x, y
             );
+        }else{
+            System.out.println("Element position not found in the DB");
         }
         return element;
     }

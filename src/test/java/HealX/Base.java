@@ -37,7 +37,7 @@ public class Base {
             } else if (locatorType == "xpath") {
                 element = driver.findElement(By.xpath(locatorValue));
             } else {
-                element = driver.findElement(By.xpath("//*[contains(@" + locatorType + ", '" + locatorValue + "')]"));
+                element = driver.findElement(By.xpath("//*[@" + locatorType + "='" + locatorValue + "']"));
             }
         } catch (NoSuchElementException e) {
             return null;

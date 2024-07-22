@@ -73,7 +73,7 @@ public class FirstRun {
         base.setUp();
         driver = base.getDriver();
         FirstRun fr = new FirstRun();
-        fr.firstRunUpdate("logo","id","nav-logo-spritesd");
+        fr.firstRunUpdate("logo","id","nav-logo-sprites");
 
         base.tearDown();
     }

@@ -65,6 +65,15 @@ public class    RemoteDB {
         }
         return doc.getString("locatorType");
     }
+    public void setAlternateLocator(String locatorName,String alternateLocator){
+        Document filter = new Document("key", locatorName);
+
+
+        Document update = new Document("$set", new Document("alternateLocator", alternateLocator));
+
+        // Perform the update
+        collection.updateOne(filter, update);
+    }
     public String getAlternateLocator(String locatorName){
         // Replace the placeholder with your MongoDB deployment's connection string
         Document doc= collection.find(eq("key", locatorName)).first();
@@ -123,9 +132,14 @@ public class    RemoteDB {
             System.out.println("No matching documents found.");
             return null;
         }
-        int x = doc.getInteger('x');
-        int y = doc.getInteger('y');
-        Pair<Integer, Integer> position = Pair.of(x,y);
+        Integer x = doc.getInteger("x");
+        Integer y = doc.getInteger("y");
+
+        if (x == null || y == null) {
+            System.out.println("x or y value is null in the document.");
+            return null;
+        }
+        Pair<Integer, Integer> position = Pair.of(x, y);
         return position;
     }
 
