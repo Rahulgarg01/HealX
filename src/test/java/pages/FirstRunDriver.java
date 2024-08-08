@@ -1,78 +1,77 @@
-package HealX;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.Alert;
-import org.openqa.selenium.Cookie;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.OutputType;
-import org.openqa.selenium.TakesScreenshot;
-import org.openqa.selenium.WebDriverException;
-import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.ui.WebDriverWait;
+package pages;
 
-import java.lang.reflect.Field;
+import org.openqa.selenium.*;
+
 import java.lang.reflect.Method;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
-import java.util.concurrent.TimeUnit;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+public class FirstRunDriver implements WebDriver {
+    private WebDriver driver;
 
-public class CustomWebDriver implements WebDriver, TakesScreenshot, JavascriptExecutor {
-    public static WebDriver driver;
-
-    public CustomWebDriver(WebDriver delegate) {
+    public FirstRunDriver(WebDriver delegate) {
+        // Initialize your WebDriver here (e.g., ChromeDriver, FirefoxDriver)
+        // For example, using ChromeDriver:
         driver = delegate;
     }
-
-
     @Override
     public WebElement findElement(By by) {
-
         try {
-            return driver.findElement(by);
-        } catch (NoSuchElementException e) {
+            WebElement ele = driver.findElement(by);
             String locatorName;
+            FirstRun objectFirstRun = new FirstRun(driver);
             try {
                 StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
                 // The element at index 2 should be the caller (depending on how deep the call stack is)
                 String callerClassName = stackTrace[2].getClassName();
+                System.out.println("Ram Ram"+ callerClassName);
                 Class<?> callerClass = null;
                 callerClass = Class.forName(callerClassName);
+                System.out.println(callerClass);
                 Object callerInstance = callerClass.getDeclaredConstructor().newInstance();
-
+                System.out.println(callerInstance);
                 // Define the parameter type
-                Class<?>[] paramTypes = new Class<?>[] { By.class };
+                Class<?>[] paramTypes = new Class<?>[]{By.class};
                 Method method = callerClass.getMethod("getLocatorName", paramTypes);
-
+                System.out.println(method);
                 // Call the method with a parameter
                 locatorName = (String) method.invoke(callerInstance, by);
-                System.out.println(locatorName);
+                System.out.println("Storing Locator : " + locatorName+ "in DB");
 
             } catch (Exception ex) {
-//                System.out.println(by.);
-//                System.out.println(by.getClass());
                 System.out.println("Unable to find the locator Name using StackTrace");
                 throw new RuntimeException(ex);
             }
-            if (locatorName!=null){
-                NormalRun nr = new NormalRun(driver);
-                WebElement healedElement = nr.getElement(locatorName,by);
-                    if (healedElement != null) {
-                        return healedElement;
-                    }
+            String pattern = "By\\.(.+?):\\s*(.+)";
+
+            // Compile the pattern
+            Pattern compiledPattern = Pattern.compile(pattern);
+            String locatorString = by.toString();
+            // Match the input string with the pattern
+            Matcher matcher = compiledPattern.matcher(locatorString);
+
+            // Define variables to hold the extracted parts
+            String locatorType = null;
+            String locatorValue = null;
+
+            // Extract the parts if the pattern matches
+            if (matcher.matches()) {
+                locatorType = matcher.group(1); // The part between 'By.' and ':'
+                locatorValue = matcher.group(2); // The part after ':'
             }
-
-            // Element not found, call HealX
-//            String varName = getVariableName(by);
-            System.out.println("Not found the following Locator :"+locatorName);
-
+            System.out.println(locatorName);
+            System.out.println(locatorType);
+            System.out.println(locatorValue);
+            objectFirstRun.firstRunUpdate(locatorName, locatorType, locatorValue,ele);
+            return ele;
+        } catch (NoSuchElementException e) {
+            System.out.println("Not found the following Locator :" + by);
+            throw e;
         }
-        return null;
     }
 
+    // Implement all WebDriver methods
     @Override
     public void get(String url) {
         driver.get(url);
@@ -133,18 +132,8 @@ public class CustomWebDriver implements WebDriver, TakesScreenshot, JavascriptEx
         return driver.manage();
     }
 
-    @Override
-    public <X> X getScreenshotAs(OutputType<X> target) throws WebDriverException {
-        return ((TakesScreenshot) driver).getScreenshotAs(target);
-    }
-
-    @Override
-    public Object executeScript(String script, Object... args) {
-        return ((JavascriptExecutor) driver).executeScript(script, args);
-    }
-
-    @Override
-    public Object executeAsyncScript(String script, Object... args) {
-        return ((JavascriptExecutor) driver).executeAsyncScript(script, args);
+    // Add any custom methods or override existing ones for additional functionality
+    public void customMethod() {
+        // Custom functionality here
     }
 }

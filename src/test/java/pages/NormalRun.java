@@ -1,8 +1,6 @@
-package HealX;
+package pages;
 
-import org.apache.commons.lang3.tuple.Pair;
 import org.openqa.selenium.*;
-import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;

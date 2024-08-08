@@ -1,4 +1,4 @@
-package HealX;
+package pages;
 
 import static com.mongodb.client.model.Filters.eq;
 

@@ -1,8 +1,6 @@
-package HealX;
+package pages;
 
-import net.bytebuddy.description.type.TypeDescription;
 import org.openqa.selenium.*;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.apache.commons.lang3.tuple.Pair;
 
 
