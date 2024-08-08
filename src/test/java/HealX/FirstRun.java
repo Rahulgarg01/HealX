@@ -13,7 +13,27 @@ import static org.junit.Assert.assertNotNull;
 
 public class FirstRun {
     private static WebDriver driver;
-    public static Base base;
+    FirstRun(WebDriver driver){
+        this.driver = driver;
+    }
+    public WebElement findElement(String locatorType, String locatorValue) {
+        WebElement element = null;
+        try {
+            if (locatorType.equals("id")) {
+                element = driver.findElement(By.id(locatorValue));
+            } else if (locatorType.equals("cssSelector")) {
+                element = driver.findElement(By.cssSelector(locatorValue));
+            } else if (locatorType.equals("xpath")) {
+                element = driver.findElement(By.xpath(locatorValue));
+            } else {
+                element = driver.findElement(By.xpath("//*[@" + locatorType + "='" + locatorValue + "']"));
+            }
+        } catch (NoSuchElementException e) {
+            return null;
+        }
+
+        return element;
+    }
     //    public void
     public Map<String, String> getElementAttributes(WebElement element) {
         Map<String, String> attributes = null;
@@ -51,38 +71,22 @@ public class FirstRun {
         return Pair.of(x,y);
     }
 
-    public void firstRunUpdate(String locatorName, String locatorType,String locatorValue) {
+    public void firstRunUpdate(String locatorName, String locatorType,String locatorValue,WebElement specificElement) {
+
         // Locate the element
         RemoteDB db = new RemoteDB();
         String locator= db.getLocator(locatorName) ;
         if(locator == null){
             db.addData(locatorName,locatorType,locatorValue);
         }
-        WebElement element = base.findElement(locatorType,locatorValue);
-        Pair<Integer, Integer> coordinates = getCoordinates(element);
+        Pair<Integer, Integer> coordinates = getCoordinates(specificElement);
         int x = coordinates.getLeft();
         int y = coordinates.getRight();
-        Map<String, String> attributes = getElementAttributes(element);
+        Map<String, String> attributes = getElementAttributes(specificElement);
 
         db.setAttributesAndCoordinates(locatorName,x,y,attributes);
 
     }
 
-    public static void main(String[] args) {
-        base = new Base();
-        base.setUp();
-        driver = base.getDriver();
-        FirstRun fr = new FirstRun();
-        fr.firstRunUpdate("logo","id","nav-logo-sprites");
-
-        base.tearDown();
-    }
 }
 
-
-
-//    Element's Position: (2, 5)
-//    Element's Position: (138, 25)
-//    Element's Position: (156, 15)
-//
-//    Process finished with exit code 0

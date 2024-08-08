@@ -85,17 +85,17 @@ public class    RemoteDB {
         }
         return doc.getString("alternateLocator");
     }
-    public String getAlternateLocatorType(String locatorName){
-        // Replace the placeholder with your MongoDB deployment's connection string
-        Document doc= collection.find(eq("key", locatorName)).first();
-
-
-        if (doc == null)  {
-            System.out.println("No matching documents found.");
-            return null;
-        }
-        return doc.getString("alternateLocatorType");
-    }
+//    public String getAlternateLocatorType(String locatorName){
+//        // Replace the placeholder with your MongoDB deployment's connection string
+//        Document doc= collection.find(eq("key", locatorName)).first();
+//
+//
+//        if (doc == null)  {
+//            System.out.println("No matching documents found.");
+//            return null;
+//        }
+//        return doc.getString("alternateLocatorType");
+//    }
     public String getLocatorAttributeValue(String locatorName, String attributeName){
         Document doc= collection.find(eq("key", locatorName)).first();
         if (doc == null)  {

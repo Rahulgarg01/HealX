@@ -35,9 +35,9 @@ public class HealX {
             }
             try {
                 System.out.println("Trying attribute: " + attr);
-                newLocator ="//*[@" + attr + "='" + value + "']";
+                newLocator ="[" + attr + "='" + value + "']";
                 List<WebElement> newNode = wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(
-                        By.xpath(newLocator)
+                        By.cssSelector(newLocator)
                 ));
                 if(newNode != null && newNode.size() == 1){
                     log("Element Found !!!");
@@ -57,11 +57,13 @@ public class HealX {
     }
     public WebElement getHealedWebElementUsingPosition(String locatorName) {
         WebElement element = null;
+        System.out.println("Trying to find Element using it's position on the page");
         Pair<Integer,Integer> coordinates =db.getElementPosition(locatorName);
         if(coordinates!=null && coordinates.first()!=null){
             int x = coordinates.first();
             int y = coordinates.second();
             JavascriptExecutor js = (JavascriptExecutor) driver;
+            System.out.println("Rammmmm"+x+" "+y);
             element = (WebElement) js.executeScript(
                 "return document.elementFromPoint(arguments[0], arguments[1]);", x, y
             );
