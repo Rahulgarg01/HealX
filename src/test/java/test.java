@@ -1,3 +1,8 @@
+import org.openqa.selenium.By;
+import org.openqa.selenium.support.PageFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import pages.CustomWebDriver;
 import pages.Details;
 import pages.FirstRunDriver;
 import org.junit.After;
@@ -10,6 +15,7 @@ import pages.Page;
 
 import java.time.Duration;
 
+import static pages.CustomWebDriver.driver;
 import static pages.HealX.wait;
 
 //public class test extends Details {

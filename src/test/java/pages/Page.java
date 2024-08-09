@@ -12,7 +12,7 @@ public class Page extends Details {
     WebDriverWait wait;
     private static final Logger log = LoggerFactory.getLogger(Page.class);
     By RelLogo = By.cssSelector("img[class='img-fluid logo']");
-    By searchBar = By.cssSelector("div[class='search-wrapper-cs'] a[aria-label='Search']");
+    By searchBarRel = By.cssSelector("div[class='search-wrapper-cs'] a[aria-label='Search']");
 
 //    @FindBy(css = "img[class='img-fluid logo']")
 //    WebElement RelLogo;
@@ -27,25 +27,26 @@ public class Page extends Details {
 ////        PageFactory.initElements(driver, this);
 //
 //    }\
-public String getLocatorName(By locator) {
-    Class<?> clazz = this.getClass();
-    while (clazz != null) {
-        Field[] fields = clazz.getDeclaredFields();
-        for (Field field : fields) {
-            try {
-                field.setAccessible(true);
-                if (field.get(this).equals(locator)) {
-                    return ( field.getName());
-                    // Add more cases if you use other By types
-                }
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            }
-        }
-        clazz = clazz.getSuperclass(); // Move to the superclass to check fields there
-    }
-    return null;
-}
+//public String getLocatorName(By locator) {
+//    Class<?> clazz = this.getClass();
+//    while (clazz != null) {
+//        Field[] fields = clazz.getDeclaredFields();
+//        for (Field field : fields) {
+//            try {
+//                field.setAccessible(true);
+//                Object fieldValue = field.get(this);
+//                if (fieldValue != null && fieldValue.equals(locator)) {
+//                    return field.getName();
+//                }
+//            } catch (IllegalAccessException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//        clazz = clazz.getSuperclass(); // Move to the superclass to check fields there
+//    }
+//    return null;
+//}
+
     public void initialize(FirstRunDriver driver, WebDriverWait wait){
         this.driver = driver;
         this.wait = wait;
@@ -53,12 +54,12 @@ public String getLocatorName(By locator) {
     public void validateHomePage(){
 //        wait.until(ExpectedConditions.visibilityOf(RelLogo));
 //        RelLogo.isDisplayed();
-        driver.findElement(RelLogo).isDisplayed();
+        driver.findElement(RelLogo);
     }
 
     public void clickBtn(){
 //        wait.until(ExpectedConditions.visibilityOf(searchBar));
 //        searchBar.click();
-        driver.findElement(searchBar).click();
+        driver.findElement(searchBarRel).click();
     }
 }
