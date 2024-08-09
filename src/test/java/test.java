@@ -1,10 +1,6 @@
-import org.openqa.selenium.By;
-import org.openqa.selenium.support.PageFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import pages.CustomWebDriver;
-import pages.Details;
-import pages.FirstRunDriver;
+import SelfHealing.CustomWebDriver;
+import SelfHealing.Details;
+import SelfHealing.FirstRunDriver;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -14,21 +10,19 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import pages.Page;
 
 import java.time.Duration;
+import static SelfHealing.HealX.wait;
 
-import static pages.CustomWebDriver.driver;
-import static pages.HealX.wait;
-
-//public class test extends Details {
+//public class test extends SelfHealing.Details {
 //    private static final Logger log = LoggerFactory.getLogger(test.class);
 //    By logo = By.id("nav-logo-sprites");
 //    By searchBar = By.id("twotabsearchtextbox");
 //    By languageBtn = By.id("icp-nav-flyout");
 //    By searchBtn = By.cssSelector("#nav-search-submit-button");
-//    public static FirstRunDriver driver;
+//    public static SelfHealing.FirstRunDriver driver;
 //    @Before
 //    public void beforeTest  () {
 //        WebDriver delegate =  new ChromeDriver();
-//        driver = new FirstRunDriver(delegate) ;
+//        driver = new SelfHealing.FirstRunDriver(delegate) ;
 //        PageFactory.initElements(delegate,this);
 //        driver.get("https://www.amazon.in/");
 //    }
@@ -60,13 +54,13 @@ public class test extends Details {
 //    By searchBar = By.id("twotabsearchtextbox");
 //    By languageBtn = By.id("icp-nav-flyout");
 //    By searchBtn = By.cssSelector("#nav-search-submit-button");
-    public static FirstRunDriver driver;
+    public static CustomWebDriver driver;
 
     private Page page;
     @Before
     public void beforeTest  () {
         WebDriver delegate =  new ChromeDriver();
-        driver = new FirstRunDriver(delegate);
+        driver = new CustomWebDriver(delegate);
 //        PageFactory.initElements(delegate,this);
         wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         driver.manage().window().maximize();

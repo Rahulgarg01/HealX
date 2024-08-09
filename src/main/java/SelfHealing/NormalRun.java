@@ -1,4 +1,4 @@
-package pages;
+package SelfHealing;
 
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -69,7 +69,7 @@ public class NormalRun {
             System.out.println("Locator Found using positional coordinates: ");
             return element;
         }
-        System.out.println("Unable to find A healed Locator. Ensure that after integrating HealX in your project you have made a firstRun with Correct locators and tests were passing");
+        System.out.println("Unable to find A healed Locator. Ensure that after integrating SelfHealing.HealX in your project you have made a firstRun with Correct locators and tests were passing");
         return element;
     }
 }

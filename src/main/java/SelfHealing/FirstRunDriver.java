@@ -1,4 +1,4 @@
-package pages;
+package SelfHealing;
 
 import org.openqa.selenium.*;
 

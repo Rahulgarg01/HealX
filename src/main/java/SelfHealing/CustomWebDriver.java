@@ -1,4 +1,5 @@
-package pages;
+package SelfHealing;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -57,7 +58,7 @@ public class CustomWebDriver implements WebDriver, TakesScreenshot, JavascriptEx
                     }
             }
 
-            // Element not found, call HealX
+            // Element not found, call SelfHealing.HealX
 //            String varName = getVariableName(by);
             System.out.println("Not found the following Locator :"+locatorName);
 
