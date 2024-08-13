@@ -1,24 +1,17 @@
-package HealX;
+package SelfHealing;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.Alert;
-import org.openqa.selenium.Cookie;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriverException;
-import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
-import java.util.concurrent.TimeUnit;
 
 public class CustomWebDriver implements WebDriver, TakesScreenshot, JavascriptExecutor {
     public static WebDriver driver;
@@ -65,7 +58,7 @@ public class CustomWebDriver implements WebDriver, TakesScreenshot, JavascriptEx
                     }
             }
 
-            // Element not found, call HealX
+            // Element not found, call SelfHealing.HealX
 //            String varName = getVariableName(by);
             System.out.println("Not found the following Locator :"+locatorName);
 

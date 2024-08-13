@@ -1,4 +1,4 @@
-package HealX;
+package SelfHealing;
 
 import org.openqa.selenium.By;
 
@@ -12,10 +12,14 @@ public class Details {
             for (Field field : fields) {
                 try {
                     field.setAccessible(true);
-                    if (field.get(this).equals(locator)) {
-                        return ( field.getName());
-                        // Add more cases if you use other By types
+                    Object fieldValue = field.get(this);
+                    if (fieldValue != null && fieldValue.equals(locator)) {
+                        return field.getName();
                     }
+//                    if (field.get(this).equals(locator)) {
+//                        return ( field.getName());
+//                        // Add more cases if you use other By types
+//                    }
                 } catch (IllegalAccessException e) {
                     e.printStackTrace();
                 }

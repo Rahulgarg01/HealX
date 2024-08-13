@@ -1,7 +1,8 @@
-package HealX;
+package SelfHealing;
 
 import org.openqa.selenium.*;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Set;
@@ -19,7 +20,7 @@ public class FirstRunDriver implements WebDriver {
     public WebElement findElement(By by) {
         try {
             WebElement ele = driver.findElement(by);
-            String locatorName;
+            String locatorName="";
             FirstRun objectFirstRun = new FirstRun(driver);
             try {
                 StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
@@ -28,16 +29,20 @@ public class FirstRunDriver implements WebDriver {
                 Class<?> callerClass = null;
                 callerClass = Class.forName(callerClassName);
                 Object callerInstance = callerClass.getDeclaredConstructor().newInstance();
-
                 // Define the parameter type
                 Class<?>[] paramTypes = new Class<?>[]{By.class};
                 Method method = callerClass.getMethod("getLocatorName", paramTypes);
-
                 // Call the method with a parameter
                 locatorName = (String) method.invoke(callerInstance, by);
                 System.out.println("Storing Locator : " + locatorName+ "in DB");
 
-            } catch (Exception ex) {
+            }catch (InvocationTargetException e) {
+                // Retrieve the underlying cause
+                Throwable cause = e.getCause();
+                cause.printStackTrace();
+                throw new RuntimeException(e);
+            }
+            catch (Exception ex) {
                 System.out.println("Unable to find the locator Name using StackTrace");
                 throw new RuntimeException(ex);
             }
