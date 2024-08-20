@@ -12,6 +12,14 @@ The **HealX** is a powerful Self Healing Framework designed to enhance Selenium 
 - **First Run Mode:** Captures and stores element attributes and positions during the first execution of the test.
 - **Stack Trace Analysis:** Identifies the exact locator causing an issue and attempts to heal it.
 
+## Components
+
+- **CustomWebDriver:** A custom WebDriver that extends the Selenium WebDriver. It attempts to heal the locator if a NoSuchElementException is thrown, utilizing the NormalRun class for healing.
+- **Details:** A utility class that provides a method (getLocatorName) to retrieve the name of the locator using reflection, which helps in identifying the correct locator when an exception occurs. 
+- **FirstRun:** Responsible for capturing and storing element attributes and their coordinates during the initial run. It also updates the remote database with these details.
+- **FirstRunDriver:** Another custom WebDriver implementation designed to capture and store locator details in the database during the first run of the test. This helps in healing locators based on the stored data. 
+- **HealX:** The core of the self-healing process. It tries to heal the broken locators using attribute-based, combination-based, and position-based healing techniques.
+
 ## Getting Started
 
 ### Prerequisites
