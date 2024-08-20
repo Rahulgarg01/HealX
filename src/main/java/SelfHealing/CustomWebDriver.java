@@ -27,8 +27,9 @@ public class CustomWebDriver implements WebDriver, TakesScreenshot, JavascriptEx
         try {
             return driver.findElement(by);
         } catch (NoSuchElementException e) {
-            String locatorName;
+            String locatorName="";
             try {
+                System.out.println("Trying to find Element Name using StackTrace for Healing");
                 StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
                 // The element at index 2 should be the caller (depending on how deep the call stack is)
                 String callerClassName = stackTrace[2].getClassName();
@@ -42,7 +43,7 @@ public class CustomWebDriver implements WebDriver, TakesScreenshot, JavascriptEx
 
                 // Call the method with a parameter
                 locatorName = (String) method.invoke(callerInstance, by);
-                System.out.println(locatorName);
+                System.out.println("Healing Locator :"+ locatorName);
 
             } catch (Exception ex) {
 //                System.out.println(by.);

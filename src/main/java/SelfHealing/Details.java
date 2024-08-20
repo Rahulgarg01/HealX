@@ -4,7 +4,7 @@ import org.openqa.selenium.By;
 
 import java.lang.reflect.Field;
 
-public class Details {
+public class    Details {
     public String getLocatorName(By locator) {
         Class<?> clazz = this.getClass();
         while (clazz != null) {

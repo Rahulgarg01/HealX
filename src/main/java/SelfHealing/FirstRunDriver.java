@@ -44,7 +44,8 @@ public class FirstRunDriver implements WebDriver {
             }
             catch (Exception ex) {
                 System.out.println("Unable to find the locator Name using StackTrace");
-                throw new RuntimeException(ex);
+                return ele;
+//                throw new RuntimeException(ex);
             }
             String pattern = "By\\.(.+?):\\s*(.+)";
 
