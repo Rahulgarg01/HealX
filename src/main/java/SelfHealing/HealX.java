@@ -118,7 +118,7 @@ public class HealX {
                     log("Element Found using combined attributes!!! Combined Locator Used: " + locator);
                     return locator;
                 }
-            } catch (Exception e) {
+            }catch (Exception e) {
                 System.out.println("Failed to find node using combined attributes: " + locator);
             }
         }
