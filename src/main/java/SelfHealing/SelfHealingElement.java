@@ -14,7 +14,7 @@ public class SelfHealingElement extends Details implements WebElement,WrapsEleme
     private ElementLocator locator;
     private WebDriver driver;
     private Field field;
-    private String locatorName;
+    public String locatorName;
     FirstRun objectFirstRun;
 
     public SelfHealingElement(WebElement element, ElementLocator locator, WebDriver driver, Field field) {

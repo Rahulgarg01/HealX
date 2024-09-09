@@ -82,11 +82,47 @@ public class CustomWebDriver implements WebDriver, TakesScreenshot, JavascriptEx
         return driver.getTitle();
     }
 
-    @Override
     public List<WebElement> findElements(By by) {
-        return driver.findElements(by);
-    }
+        try {
+            System.out.println("Starting to find Elements");
+            List<WebElement> elementLs = driver.findElements(by);
+            System.out.println(elementLs.get(0));
+            return elementLs;
+        } catch (Exception e) {
+            String locatorName="";
+            try {
+                System.out.println("Trying to find Element Name using StackTrace for Healing");
+                StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
+                // The element at index 2 should be the caller (depending on how deep the call stack is)
+                String callerClassName = stackTrace[2].getClassName();
+                Class<?> callerClass = null;
+                callerClass = Class.forName(callerClassName);
+                Object callerInstance = callerClass.getDeclaredConstructor().newInstance();
 
+                // Define the parameter type
+                Class<?>[] paramTypes = new Class<?>[] { By.class };
+                Method method = callerClass.getMethod("getLocatorName", paramTypes);
+
+                // Call the method with a parameter
+                locatorName = (String) method.invoke(callerInstance, by);
+                System.out.println("Healing Locator :"+ locatorName);
+
+            } catch (Exception ex) {
+                System.out.println("Unable to find the locator Name using StackTrace");
+                throw new RuntimeException(ex);
+            }
+            if (locatorName!=null){
+                NormalRun nr = new NormalRun(driver);
+                List<WebElement> healedElement = nr.getElements(locatorName,by);
+                if (healedElement != null) {
+                    return healedElement;
+                }
+            }
+
+            System.out.println("Not found the following Locator :"+locatorName);
+        }
+        return null;
+    }
     @Override
     public String getPageSource() {
         return driver.getPageSource();

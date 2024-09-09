@@ -1,12 +1,16 @@
 import SelfHealing.CustomWebDriver;
 import SelfHealing.Details;
 import SelfHealing.FirstRunDriver;
+import SelfHealing.NormalRun;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import pages.Page;
 
 import java.time.Duration;
@@ -47,15 +51,18 @@ import static SelfHealing.HealX.wait;
 //    }
 //}
 public class test extends Details {
-//    private static final Logger log = LoggerFactory.getLogger(test.class);
+    private static final Logger log = LoggerFactory.getLogger(test.class);
+    //    private static final Logger log = LoggerFactory.getLogger(test.class);
 //    By aakashLogo = By.cssSelector("img[src='images/AD_logo.png']");
 //    By registerNowBtn = By.cssSelector("a[class='_registerNowBtn_12rr9_332']");
 //    By logo = By.id("nav-logo-sprites");
 //    By searchBar = By.id("twotabsearchtextbox");
 //    By languageBtn = By.id("icp-nav-flyout");
 //    By searchBtn = By.cssSelector("#nav-search-submit-button");
-    public static CustomWebDriver driver;
 
+    public static   CustomWebDriver driver;
+    By logooo = By.xpath("(//a[@class='navbar-brand'])[1]");
+    By many = By.cssSelector("[data-bs-toggle='dropdown']");
     private Page page;
     @Before
     public void beforeTest  () {
@@ -71,7 +78,9 @@ public class test extends Details {
 
     @Test
     public void validateHomePage(){
+        driver.findElement(logooo).click();
         page.validateHomePage();
+        driver.findElements(many);
         page.clickBtn();
     }
 

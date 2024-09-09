@@ -70,7 +70,7 @@ public class FirstRunDriver implements WebDriver {
             objectFirstRun.firstRunUpdate(locatorName, locatorType, locatorValue,ele);
             return ele;
         } catch (NoSuchElementException e) {
-            System.out.println("Not found the following Locator :" + by);
+            System.out.println("Not found the following Locator even in first Run :" + by);
             throw e;
         }
     }
@@ -93,7 +93,62 @@ public class FirstRunDriver implements WebDriver {
 
     @Override
     public List<WebElement> findElements(By by) {
-        return driver.findElements(by);
+        try{
+            List<WebElement> ele = driver.findElements(by);
+            String locatorName="";
+            FirstRun objectFirstRun = new FirstRun(driver);
+            try {
+                StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
+                // The element at index 2 should be the caller (depending on how deep the call stack is)
+                String callerClassName = stackTrace[2].getClassName();
+                Class<?> callerClass = null;
+                callerClass = Class.forName(callerClassName);
+                Object callerInstance = callerClass.getDeclaredConstructor().newInstance();
+                // Define the parameter type
+                Class<?>[] paramTypes = new Class<?>[]{By.class};
+                Method method = callerClass.getMethod("getLocatorName", paramTypes);
+                // Call the method with a parameter
+                locatorName = (String) method.invoke(callerInstance, by);
+                System.out.println("Storing Locator : " + locatorName+ "in DB");
+
+            }catch (InvocationTargetException e) {
+                // Retrieve the underlying cause
+                Throwable cause = e.getCause();
+                cause.printStackTrace();
+                throw new RuntimeException(e);
+            }
+            catch (Exception ex) {
+                System.out.println("Unable to find the locator Name using StackTrace");
+                return ele;
+//                throw new RuntimeException(ex);
+            }
+            String pattern = "By\\.(.+?):\\s*(.+)";
+
+            // Compile the pattern
+            Pattern compiledPattern = Pattern.compile(pattern);
+            String locatorString = by.toString();
+            // Match the input string with the pattern
+            Matcher matcher = compiledPattern.matcher(locatorString);
+
+            // Define variables to hold the extracted parts
+            String locatorType = null;
+            String locatorValue = null;
+
+            // Extract the parts if the pattern matches
+            if (matcher.matches()) {
+                locatorType = matcher.group(1); // The part between 'By.' and ':'
+                locatorValue = matcher.group(2); // The part after ':'
+            }
+            System.out.println(locatorName);
+            System.out.println(locatorType);
+            System.out.println(locatorValue);
+            objectFirstRun.firstRunUpdate(locatorName, locatorType, locatorValue,ele.get(0));
+            return ele;
+        }catch (NoSuchElementException e) {
+            System.out.println("Not found the following Locator even in first Run :" + by);
+            throw e;
+        }
+
     }
 
     @Override

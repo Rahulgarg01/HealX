@@ -1,9 +1,6 @@
 package SelfHealing;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.internal.collections.Pair;
@@ -13,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.junit.Assert.assertNotNull;
 import static org.testng.internal.Utils.log;
 
 public class HealX {
@@ -84,7 +82,7 @@ public class HealX {
     public String getHealedLocatorUsingAttributes(String locatorName) {
         System.out.println("Attempting to find node using attribute priority list");
 
-        // First, try to find the element using single attributes
+//         First, try to find the element using single attributes
         for (String attr : ATTRIBUTE_PRIORITY) {
             String value = db.getLocatorAttributeValue(locatorName, attr);
             if (value != null) {
@@ -125,21 +123,91 @@ public class HealX {
 
         return null; // Return null if no element is found using either method
     }
+    public String getHealedLocatorUsingAttributes2(String locatorName) {
+        System.out.println("Attempting to find node using attribute priority list");
+
+//         First, try to find the element using single attributes
+        Pair<Integer, Integer> coordinates = db.getElementPosition(locatorName);
+        int x = coordinates.first();
+        int y = coordinates.second();
+        for (String attr : ATTRIBUTE_PRIORITY) {
+            String value = db.getLocatorAttributeValue(locatorName, attr);
+            if (value != null) {
+                try {
+                    System.out.println("Trying attribute: " + attr);
+                    String singleAttributeLocator = "[" + attr + "='" + value + "']";
+                    List<WebElement> newNode = wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(
+                            By.cssSelector(singleAttributeLocator)
+                    ));
+                    WebElement firstElement = newNode.get(0);
+                    Point point = firstElement.getLocation();
+
+                    int x1 = point.getX();
+                    int y1 = point.getY();
+                    // Assert the element is not null and the position is retrieved
+                    assertNotNull(firstElement);
+                    assertNotNull(point);
+                    System.out.println(x+x1+y+y1);
+                    if (newNode != null && newNode.size() >= 1 && x==x1 && y==y1) {
+                        log("Element Found using single attribute!!! Locator: " + singleAttributeLocator);
+                        return singleAttributeLocator;
+                    }
+                } catch (Exception e) {
+                    System.out.println("Failed to find node using attribute: " + attr);
+                }
+            }
+        }
+
+        // If single attribute method fails, try using combinations of two attributes
+        System.out.println("Attempting to find node using combination of two attributes");
+        List<String> possibleLocators = createLocatorsWithAttributeCombinations(locatorName);
+
+        for (String locator : possibleLocators) {
+            try {
+                System.out.println("Trying combined locator: " + locator);
+                List<WebElement> newNode = wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(
+                        By.cssSelector(locator)
+                ));
+                WebElement firstElement = newNode.get(0);
+                Point point = firstElement.getLocation();
+
+                int x1 = point.getX();
+                int y1 = point.getY();
+                // Assert the element is not null and the position is retrieved
+                assertNotNull(firstElement);
+                assertNotNull(point);
+                if (newNode != null && newNode.size() >= 1 && x==x1 && y==y1) {
+                    log("Element Found using combined attributes!!! Combined Locator Used: " + locator);
+                    return locator;
+                }
+            }catch (Exception e) {
+                System.out.println("Failed to find node using combined attributes: " + locator);
+            }
+        }
+
+        return null; // Return null if no element is found using either method
+    }
 
     public WebElement getHealedWebElementUsingPosition(String locatorName) {
-        WebElement element = null;
-        System.out.println("Trying to find Element using its position on the page");
-        Pair<Integer, Integer> coordinates = db.getElementPosition(locatorName);
-        if (coordinates != null && coordinates.first() != null) {
-            int x = coordinates.first();
-            int y = coordinates.second();
-            JavascriptExecutor js = (JavascriptExecutor) driver;
-            element = (WebElement) js.executeScript(
-                    "return document.elementFromPoint(arguments[0], arguments[1]);", x, y
-            );
-        } else {
-            System.out.println("Element position not found in the DB");
+        try {
+            WebElement element = null;
+
+            System.out.println("Trying to find Element using its position on the page");
+            Pair<Integer, Integer> coordinates = db.getElementPosition(locatorName);
+            if (coordinates != null && coordinates.first() != null) {
+                int x = coordinates.first();
+                int y = coordinates.second();
+                JavascriptExecutor js = (JavascriptExecutor) driver;
+                element = (WebElement) js.executeScript(
+                        "return document.elementFromPoint(arguments[0], arguments[1]);", x, y
+                );
+            } else {
+                System.out.println("Element position not found in the DB");
+            }
+            return element;
+        }catch (Exception e){
+            System.out.println(e);
+            return null;
         }
-        return element;
     }
 }
