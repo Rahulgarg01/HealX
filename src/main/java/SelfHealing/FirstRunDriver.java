@@ -8,10 +8,11 @@ import java.util.List;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-public class FirstRunDriver implements WebDriver {
+public class FirstRunDriver extends CustomWebDriver implements WebDriver {
     private WebDriver driver;
 
     public FirstRunDriver(WebDriver delegate) {
+        super();
         // Initialize your WebDriver here (e.g., ChromeDriver, FirefoxDriver)
         // For example, using ChromeDriver:
         driver = delegate;

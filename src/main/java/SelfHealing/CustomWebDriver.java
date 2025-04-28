@@ -20,6 +20,10 @@ public class CustomWebDriver implements WebDriver, TakesScreenshot, JavascriptEx
         driver = delegate;
     }
 
+    public CustomWebDriver() {
+
+    }
+
 
     @Override
     public WebElement findElement(By by) {

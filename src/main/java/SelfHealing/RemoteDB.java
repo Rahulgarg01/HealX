@@ -16,7 +16,8 @@ public class    RemoteDB {
     MongoCollection<Document> collection;
     // Constructor Function
     public RemoteDB() {
-        String uri = "mongodb+srv://Rahul:dl5ce1315@cluster0.wr7uofz.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+//        String uri = "mongodb+srv://Rahul:dl5ce1315@cluster0.wr7uofz.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+        String uri = "mongodb+srv://rahulsharmaa9001:Msw1SHkpYQMGkKJc@healx-cluster.izupxho.mongodb.net/?retryWrites=true&w=majority&appName=HealX-Cluster";
         MongoClient mongoClient = MongoClients.create(uri) ;
         MongoDatabase database = mongoClient.getDatabase("loblaw");
         collection = database.getCollection("locator");
