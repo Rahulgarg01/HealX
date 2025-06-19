@@ -10,7 +10,7 @@ public class Page extends Details {
     WebDriverWait wait;
     private static final Logger log = LoggerFactory.getLogger(Page.class);
     By RelLogo = By.cssSelector("img[class='img-fluid logo']");
-    By searchBarRel = By.cssSelector("div[class='search-wrapper-cs'] a[aria-label='Search']");
+    By searchBarRel = By.cssSelector("div[class='search-wrapper-cs'] a[aria-label='Close']");
 
 //    @FindBy(css = "img[class='img-fluid logo']")
 //    WebElement RelLogo;
